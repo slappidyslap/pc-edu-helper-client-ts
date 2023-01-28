@@ -4,30 +4,35 @@
       {{ rawProps.weekName }}
     </div>
     <div>
-      <RowList @change-teacher-input="data => onChangeTeacherInput(data, rawProps.weekName)"/>
+      <RowList
+        @change-teacher-input="data => onChangeTeacherInput(data, rawProps.weekName)"
+        :changed-teacher-input-data="changedTeacherInputData"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import RowList from './RowList.vue'
-import { defineProps, toRaw, defineEmits } from 'vue'
+import { defineProps, toRaw, defineEmits, ref, toRef } from 'vue'
+import { ChangedTeacherInputData } from '@/ts/ChangedTeacherInputData'
 
-const props = defineProps({
-  weekName: {
-    type: String,
-    required: true
-  }
-})
+const props = defineProps<{
+  weekName: string,
+  changedTeacherInputData?: ChangedTeacherInputData
+}>()
 const rawProps = toRaw(props)
 
+const changedTeacherInputData = toRef(rawProps, 'changedTeacherInputData')
+
 const emit = defineEmits(['change-teacher-input'])
-type ReturningData = {
-  target: HTMLInputElement,
-  cellListId: 1 | 0,
-  rowNumber: number
-}
-function onChangeTeacherInput (data: ReturningData, weekName: string) {
+function onChangeTeacherInput (
+  data: {
+    target: HTMLInputElement,
+    cellListId: 1 | 0,
+    rowNumber: number
+  },
+  weekName: string
+) {
   emit('change-teacher-input', Object.assign(data, { weekName }))
 }
 </script>

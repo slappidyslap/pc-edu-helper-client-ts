@@ -1,24 +1,22 @@
 <template>
     <div class="d-flex flex-wrap gap-3 justify-content-center">
         <template v-for="groupName in groupNames" :key="groupName">
-            <Table :group-name="groupName" @change-teacher-input="func"/>
+            <Table
+              :group-name="groupName" @change-teacher-input="onChangeTeacherInput"
+              :changed-teacher-input-data="changedTeacherInputData"/>
         </template>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ChangedTeacherInputData } from '@/ts/ChangedTeacherInputData'
 import GroupProcesser from '@/ts/GroupProcesser'
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import Table from './Table.vue'
 
-function func (data: {
-  target: HTMLInputElement,
-  cellListId: 1 | 0,
-  isCellListGray: boolean,
-  weekName: string
-  rowNumber: number
-}) {
-  console.log(data)
+const changedTeacherInputData = ref<ChangedTeacherInputData | undefined>(undefined)
+function onChangeTeacherInput (data: ChangedTeacherInputData) {
+  changedTeacherInputData.value = data
 }
 
 const groupNames: Array<string> = []

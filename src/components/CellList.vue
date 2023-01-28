@@ -2,7 +2,10 @@
     <div :class="isGray ? 'gray-cell-list' : ''">
         <Cell :type="CellType.SUBJECT"/>
         <Cell :type="CellType.TARGET"/>
-        <TeacherCell :type="CellType.TEACHER" @change-teacher-input="onChangeTeacherInput" />
+        <TeacherCell
+            :type="CellType.TEACHER"
+            @change-teacher-input="onChangeTeacherInput"
+            :changed-teacher-input-data="changedTeacherInputData" />
         <Cell :type="CellType.AUDIENCE"/>
     </div>
 </template>
@@ -12,14 +15,20 @@ import CellType from '@/ts/CellType'
 import Cell from './Cell.vue'
 import TeacherCell from './TeacherCell.vue'
 import { defineEmits, defineProps, toRefs } from 'vue'
+import { ChangedTeacherInputData } from '@/ts/ChangedTeacherInputData'
 
 const emit = defineEmits(['change-teacher-input'])
 
 const props = defineProps<{
     isGray: boolean
+    changedTeacherInputData?: ChangedTeacherInputData
 }>()
 
-const isGray = toRefs(props).isGray
+const reacticeProps = toRefs(props)
+
+const isGray = reacticeProps.isGray
+
+const changedTeacherInputData = reacticeProps.changedTeacherInputData
 
 function onChangeTeacherInput (target: HTMLInputElement) {
   emit('change-teacher-input', { target, isCellListGray: isGray.value })
